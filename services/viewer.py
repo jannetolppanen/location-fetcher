@@ -64,7 +64,7 @@ def search_locations(filepath: str, search_term: str):
             print("-" * 50)
 
 if __name__ == "__main__":
-    filepath = "./data_cache/place_of_worship_northern_europe_20250224.json"  # Change this to your JSON file path
+    filepath = "filtered_data\place_of_worship_central_europe_20250224_named_only.json"  # Change this to your JSON file path
     
     print("1. Analyze all data")
     print("2. Search for specific locations")

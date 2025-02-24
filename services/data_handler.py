@@ -74,6 +74,41 @@ class LocationDataHandler:
         print(f"Saved to: {self.filtered_data_dir / new_filename}")
         
         return new_filename
+    
+    def filter_unnamed_locations(self, filename: str) -> str:
+        # Load the original data
+        data = self.load_data(filename)
+        
+        # Count original elements
+        original_count = len(data['elements'])
+        
+        # Filter elements that DON'T have names
+        filtered_elements = [
+            elem for elem in data['elements']
+            if 'tags' not in elem or 'name' not in elem['tags']
+        ]
+        
+        # Create new data structure
+        filtered_data = {
+            'version': data.get('version', 0.6),
+            'generator': 'Filtered Data',
+            'original_file': filename,
+            'filter_type': 'unnamed_only',
+            'original_count': original_count,
+            'filtered_count': len(filtered_elements),
+            'elements': filtered_elements
+        }
+        
+        # Save with an appropriate suffix
+        new_filename = self.save_filtered_data(filtered_data, filename, "unnamed_only")
+        
+        # Print summary
+        print(f"Filtering complete:")
+        print(f"Original elements: {original_count}")
+        print(f"Elements without names: {len(filtered_elements)}")
+        print(f"Saved to: {self.filtered_data_dir / new_filename}")
+        
+        return new_filename
 
     def list_raw_files(self) -> List[str]:
         """List all JSON files in the raw data directory"""

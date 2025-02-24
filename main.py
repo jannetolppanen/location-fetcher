@@ -32,13 +32,20 @@ if __name__ == "__main__":
 # Create the handler
     handler = LocationDataHandler()
 
+    # You can also compare both filters on the same file:
+    named_file = handler.filter_named_locations("hospital_northern_europe_20250224.json")
+    unnamed_file = handler.filter_unnamed_locations("hospital_northern_europe_20250224.json")
+
+    # Check the counts in both directories
+    handler.print_object_counts()
+
     # Get counts as data
     # counts = handler.count_objects()
     # print(f"Total raw objects: {counts['raw_data']['total_objects']}")
     # print(f"Total filtered objects: {counts['filtered_data']['total_objects']}")
 
     # Or get a nicely formatted print out
-    handler.print_object_counts()
+    # handler.print_object_counts()
 
     # See what raw files you have
     # raw_files = handler.list_raw_files()
@@ -46,7 +53,7 @@ if __name__ == "__main__":
     # Might show: ['churches_northern_europe_20240224.json', 'parks_central_europe_20240224.json']
 
     # Filter one file to keep only named locations
-    # new_file = handler.filter_named_locations("place_of_worship_northern_europe_20250224.json")
+    # new_file = handler.filter_named_locations("hospital_northern_europe_20250224.json")
     # This will:
     # 1. Load the original churches file
     # 2. Filter out any churches without names
@@ -56,3 +63,9 @@ if __name__ == "__main__":
     # See your filtered files
     # filtered_files = handler.list_filtered_files()
     # print("Available filtered files:", filtered_files)
+
+    # fetcher = OverpassFetcher()
+    
+
+    # Fetch all places of worship in northern Europe
+    # data = fetcher.fetch_data("hospital", "northern_europe")

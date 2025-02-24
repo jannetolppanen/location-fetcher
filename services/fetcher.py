@@ -45,6 +45,12 @@ class OverpassFetcher:
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
 
+    def get_subareas(self, area_name: str) -> List[Tuple[float, float, float, float]]:
+        """Get the list of subareas for a predefined area"""
+        if area_name not in self.areas:
+            raise ValueError(f"Unknown area: {area_name}. Available areas: {list(self.areas.keys())}")
+        return self.areas[area_name]["subareas"]
+
     def get_tag_key(self, node_type: str) -> str:
         tag_mapping = {
             "place_of_worship": "amenity",
