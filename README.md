@@ -15,7 +15,7 @@ A Python tool for fetching location data from OpenStreetMap using the Overpass A
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/location-fetcher.git
+git clone https://github.com/jannetolppanen/location-fetcher.git
 cd location-fetcher
 ```
 
