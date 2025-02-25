@@ -109,6 +109,58 @@ class LocationDataHandler:
         print(f"Saved to: {self.filtered_data_dir / new_filename}")
         
         return new_filename
+    
+    def filter_churches_with_wikipedia(self, filename: str) -> str:
+        """
+        Filter places of worship to keep only those that have Wikipedia articles.
+        Does not filter by denomination or religion.
+        
+        Args:
+            filename: Name of the JSON file in the raw data directory
+                        
+        Returns:
+            The name of the new filtered file
+        """
+        # Load the original data
+        data = self.load_data(filename)
+        
+        # Count original elements
+        original_count = len(data['elements'])
+        
+        # Filter elements that have Wikipedia links
+        filtered_elements = []
+        
+        for elem in data['elements']:
+            if 'tags' not in elem:
+                continue
+                
+            tags = elem['tags']
+            
+            # Check if it has a Wikipedia tag
+            if 'wikipedia' in tags:
+                filtered_elements.append(elem)
+        
+        # Create new data structure
+        filtered_data = {
+            'version': data.get('version', 0.6),
+            'generator': 'Filtered Data',
+            'original_file': filename,
+            'filter_type': 'wikipedia_only',
+            'original_count': original_count,
+            'filtered_count': len(filtered_elements),
+            'elements': filtered_elements
+        }
+        
+        # Save with an appropriate suffix
+        new_filename = self.save_filtered_data(filtered_data, filename, "with_wikipedia")
+        
+        # Print summary
+        print(f"Filtering complete:")
+        print(f"Original elements: {original_count}")
+        print(f"Places of worship with Wikipedia articles: {len(filtered_elements)}")
+        print(f"Saved to: {self.filtered_data_dir / new_filename}")
+        
+        return new_filename
 
     def list_raw_files(self) -> List[str]:
         """List all JSON files in the raw data directory"""

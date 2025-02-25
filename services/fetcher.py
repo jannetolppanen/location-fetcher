@@ -40,6 +40,67 @@ class OverpassFetcher:
                 ]
             }
         }
+     
+    def fetch_finland_worship_places(self, cache_name: str = "finland_worship_places") -> str:
+        """
+        Fetch all places of worship within Finland's borders using administrative boundary.
+        This approach ensures only places within Finland are included, not neighboring countries.
+        
+        Args:
+            cache_name: Name to use for the cache file (default: 'finland_worship_places')
+            
+        Returns:
+            JSON string with all places of worship data in Finland
+        """
+        cache_file = f"{self.cache_dir}/{cache_name}_{datetime.now().strftime('%Y%m%d')}.json"
+        
+        # Check if we already have cached data for today
+        if os.path.exists(cache_file):
+            print(f"Using cached Finland places of worship data from {cache_file}")
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                return f.read()
+        
+        print(f"Fetching all places of worship in Finland using administrative boundary")
+        
+        # Query that uses Finland's relation ID (54224) to restrict results to within Finland
+        query = """
+            [out:json][timeout:300];
+            
+            // Get Finland's administrative boundary
+            area["ISO3166-1"="FI"][admin_level=2];
+            
+            // Get all places of worship within Finland
+            (
+            node["amenity"="place_of_worship"](area);
+            way["amenity"="place_of_worship"](area);
+            relation["amenity"="place_of_worship"](area);
+            );
+            
+            out body;
+            >;
+            out skel qt;
+        """
+        
+        try:
+            data = self.fetch_with_progress(query)
+            elements = data.get("elements", [])
+            print(f"Found {len(elements)} places of worship in Finland")
+            
+            combined_data = {
+                "version": 0.6,
+                "generator": "Overpass API",
+                "elements": elements
+            }
+            
+            with open(cache_file, 'w', encoding='utf-8') as f:
+                json.dump(combined_data, f)
+            print(f"Saved {len(elements)} places of worship to cache file: {cache_file}")
+            
+            return json.dumps(combined_data)
+            
+        except Exception as e:
+            print(f"Error fetching data: {str(e)}")
+            return json.dumps({"version": 0.6, "generator": "Overpass API", "elements": []})
         
     def ensure_cache_directory(self):
         if not os.path.exists(self.cache_dir):
@@ -169,6 +230,7 @@ class OverpassFetcher:
             json.dump(combined_data, f)
         
         return json.dumps(combined_data)
+
 
 # Example usage:
 """

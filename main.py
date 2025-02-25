@@ -31,13 +31,15 @@ def analyze_example(filename: str):
 if __name__ == "__main__":
 # Create the handler
     handler = LocationDataHandler()
+    filtered_file = handler.filter_churches_with_wikipedia("finland_worship_places_20250225.json")
+
 
     # You can also compare both filters on the same file:
-    named_file = handler.filter_named_locations("hospital_northern_europe_20250224.json")
-    unnamed_file = handler.filter_unnamed_locations("hospital_northern_europe_20250224.json")
+    # named_file = handler.filter_named_locations("hospital_northern_europe_20250224.json")
+    # unnamed_file = handler.filter_unnamed_locations("hospital_northern_europe_20250224.json")
 
     # Check the counts in both directories
-    handler.print_object_counts()
+    # handler.print_object_counts()
 
     # Get counts as data
     # counts = handler.count_objects()
@@ -65,6 +67,7 @@ if __name__ == "__main__":
     # print("Available filtered files:", filtered_files)
 
     # fetcher = OverpassFetcher()
+    # finland_places = fetcher.fetch_finland_worship_places()
     
 
     # Fetch all places of worship in northern Europe
